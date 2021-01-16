@@ -1,6 +1,5 @@
-from Class import Corpus
+from Class import Embeddings
 from Class import Vowel
-from Class import Tokenizer
 from Class import Search
 
 import argparse
@@ -9,26 +8,24 @@ import time
 import sys
 
 
-def parser():
+def parse():
     parser = argparse.ArgumentParser()
     parser.add_argument('query_word', help='query word')
+    parser.add_argument('embeddings', help='embeddings')
+    parser.add_argument('vowel_dict', help='vowel_dict')
     args = parser.parse_args()
     return args
+
 
 
 def main():
     args = parse()
     query_word = args.query_word
-
-    word_embeddings = Corpus.Corpus()
-    vowel = Vowel.Vowel()
-    search = Search.Search()
-    print('load_embeddings')
-    word_embeddings.load_corpus('./hottolink.pkl', f_type='pkl')
-    rhymes = search.search_rhyme(tokenizer.input_words, word_embeddings, vowel)
-
+    embeddings = Embeddings.Embeddings(args.embeddings)
+    vowel = Vowel.Vowel(args.vowel_dict)
+    search = Search.Search(match_n=5)
+    rhymes = search.search_rhyme(query_word, embeddings, vowel)
     print(rhymes)
-    print(search.results)
     return rhymes
 
 
