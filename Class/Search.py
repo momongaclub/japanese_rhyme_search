@@ -38,7 +38,11 @@ class Search():
             words = result[0]
             word_vowel = result[1]
             for word in words:
-                rhyme = word+'('+word_vowel+')'
+                # rhyme = word+'('+word_vowel+')'
+                if word[0] == '[' and word[-1] == ']':
+                    rhyme = word[1:-1]
+                else:
+                    rhyme = word
                 rhymes.append(rhyme)
             # self.results.append(word)
         return rhymes
