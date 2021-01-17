@@ -16,13 +16,12 @@ def parse():
 
 def main():
     args = parse()
-    query_word = args.query_word
     embeddings = Embeddings.Embeddings(args.embeddings)
     vowel = Vowel.Vowel(args.vowel_dict)
-    search = Search.Search(match_n=5)
+    query_word = args.query_word
+    search = Search.Search(match_n=3)
     rhymes = search.search_rhyme(query_word, embeddings, vowel)
     print(rhymes)
-    return rhymes
 
 
 if __name__ == '__main__':
