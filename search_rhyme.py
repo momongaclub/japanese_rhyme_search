@@ -3,9 +3,6 @@ from Class import Vowel
 from Class import Search
 
 import argparse
-import gensim
-import time
-import sys
 
 
 def parse():
@@ -15,7 +12,6 @@ def parse():
     parser.add_argument('vowel_dict', help='vowel_dict')
     args = parser.parse_args()
     return args
-
 
 
 def main():
