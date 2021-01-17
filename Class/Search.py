@@ -1,48 +1,50 @@
+import time
+
 class Search():
 
-    def __init__(self):
+    def __init__(self, match_n):
         self.results = []
-        self.match_n = 2
+        self.match_n = match_n
 
-    def search_rhyme(self, input_words, corpus, vowel):
+    def search_rhyme(self, query_word, corpus, vowel):
         rhymes = ''
-        for input_word in input_words:
-            print(input_word)
+        start_time = time.time()
+        print('search_start')
 
-        query_word = input_words[0]
         query_vowel = vowel.word2vowel(query_word)
         query_yomi = vowel.word2yomi(query_word)
-
+        print('query_info: word「{0}」 vowel「{1}」 yomi「{2}」'.format(query_word, query_vowel, query_yomi))
         results = []
-        cnt = 0
-        match_n = 2
-        match_weight = 0.3
+        match_weight = 0.9
         cosine_weight = 1 - match_weight
-
-        print('target_word', query_word, 'vowel', query_vowel)
-        for word in corpus.word2vec.vocab:
-            word_vowel = vowel.word2vowel(word)
-            word_yomi = vowel.word2yomi(word)
-            if query_vowel[-match_n:] == word_vowel[-match_n:]:
-                word_match_score, scores = self.word_match_scorer(vowel, query_yomi, word_yomi)
-                cosine_score = self.cosine_similarity(corpus, query_word, word)
-
-                score = match_weight*word_match_score + cosine_weight*cosine_score
-                result = [word, word_vowel, score]
+        # for i, word in enumerate(corpus.word2vec.vocab):
+        for target_vowel, word in vowel.vowel2word.items():
+            # print('target_vowel', target_vowel,'word', word)
+            # ここで変換すると遅い
+            # word_vowel = vowel.word2vowel(word)
+            # word_yomi = vowel.word2yomi(word)
+            # 末尾からn文字母音が一致すれば
+            # if query_vowel[-self.match_n:] == word_vowel[-self.match_n:]:
+            if query_vowel[-self.match_n:] == target_vowel[-self.match_n:]:
+                # word_match_score, scores = self.word_match_scorer(vowel, query_yomi, word_yomi)
+                # cosine_score = self.cosine_similarity(corpus, query_word, word)
+                # score = match_weight*word_match_score + cosine_weight*cosine_score
+                score = 1
+                result = [word, target_vowel, score]
                 results.append(result)
-                rhymes = rhymes + word + '(' + word_vowel + ')' + ','
-            cnt += 1
-            if cnt == 2000:
-                break
-        results = sorted(results, key=lambda x:x[2], reverse=True) # scoreでソート
+                # rhymes = rhymes + word + '(' + word_vowel + ')' + ','
+        # score順にソート
+        results = sorted(results, key=lambda x:x[2], reverse=True)
+        print('search_end', time.time()-start_time)
 
         rhymes = []
         for result in results:
-            word = result[0]
+            words = result[0]
             word_vowel = result[1]
-            rhyme = word+'('+word_vowel+')'
-            rhymes.append(rhyme)
-            self.results.append(word)
+            for word in words:
+                rhyme = word+'('+word_vowel+')'
+                rhymes.append(rhyme)
+            # self.results.append(word)
         return rhymes
 
 

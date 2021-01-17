@@ -4,9 +4,24 @@ import pykakasi
 
 class Vowel():
 
-    def __init__(self):
+    def __init__(self, vowel_dict):
         self.vowel = ''
         self.yomi = ''
+        self.vowel2word = self.load_vowel2word(vowel_dict)
+
+    def load_vowel2word(self, fname):
+        vowel2word = {}
+        with open(fname, 'r') as fp:
+            for line in fp:
+                line = line.rstrip('\n')
+                line = line.split('\t')
+                vowel = line[0]
+                word = line[1]
+                if vowel2word.get(vowel) == None:
+                    vowel2word[vowel] = [word]
+                else:
+                    vowel2word[vowel].append(word)
+        return vowel2word
 
     def word2yomi(self, word):
         # TODO  正式に決まり次第音韻表記へ変更する
@@ -23,7 +38,7 @@ class Vowel():
         return yomi
 
     def word2vowel(self, word):
-        yomi = Vowel().word2yomi(word)
+        yomi = self.word2yomi(word)
         vowel = ''
         # TODO 正規表現 使いましょう
         v_list = ['a', 'i', 'u', 'e', 'o', 'A', 'I', 'U', 'E', 'O', 'n']
