@@ -31,8 +31,6 @@ class Vowel():
         kakasi.setMode("K","a") # Katakana to ascii, default: no conversion
         kakasi.setMode("J","a") # Japanese to ascii, default: no conversion
         kakasi.setMode("r","Hepburn") # default: use Hepburn Roman table
-        # kakasi.setMode("s", True) # add space, default: no separator
-        # kakasi.setMode("C", True) # capitalize, default: no capitalize
         converter = kakasi.getConverter()
         yomi = converter.do(word)
         return yomi
@@ -57,10 +55,11 @@ class Vowel():
 
 
 def main():
-    word = 'プール学校'
-    vowel = Vowel()
+    word = 'ホールプール学校何回でも'
+    vowel = Vowel(sys.argv[1])
     yomi = vowel.word2yomi(word)
-    print(yomi)
+    vowel = vowel.word2vowel(word)
+    print(yomi, vowel)
 
 if __name__ == '__main__':
     main()
